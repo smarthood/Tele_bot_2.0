@@ -1,6 +1,7 @@
 require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const birthdays = require('./birthdays.json');
+const holidays = require('./holidays.json');
 const bot = new TelegramBot(process.env.token, { polling: { interval: 2000 } });
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
@@ -24,22 +25,35 @@ bot.onText(/\/start/, (msg) => {
    
   });
 const getUpcomingBirthdays = () => {
-const date = new Date();
-let day = date.getDate();
-let month = date.getMonth() + 1;
-let year = date.getFullYear();
-let currentDate = `${day}-${month}`;
+const today = new Date().toISOString();
+let currentDate = today.substring(5,10);
   const upcomingBirthdays = birthdays.filter((birthday) => {
-    const bd = new Date(birthday.date);
-    const bdd= `${bd.getDate()}-${bd.getMonth()}`
-    return bdd == currentDate;
+    const bd = birthday.date.substring(5,10)
+    console.log("Bdate:"+bd,"Todat:"+currentDate)
+    return bd == currentDate;
   });
 
   return upcomingBirthdays;
 };
 
+const gatComingFeast=()=>{
+  const today = new Date().toISOString();
+let currentDate = today.substring(5,10);
+  const comingFeast = holidays.filter((holiday) => {
+    const bd = holiday.date.substring(5,10)
+    console.log("Bdate:"+bd,"Todat:"+currentDate)
+    return bd == currentDate;
+  });
+
+  return comingFeast;
+}
+
 setInterval(() => {
     const upcomingBirthdays = getUpcomingBirthdays();
+    const comingFeast=gatComingFeast();
+    comingFeast.forEach((holiday)=>{
+      bot.sendMessage(-1001434326296, `Happy ${holiday.name} `)
+    })
     upcomingBirthdays.forEach((birthday) => {
       bot.sendMessage(-1001434326296, `Hey, today is ${birthday.name}'s Birthday! 🎂 `);
     });
