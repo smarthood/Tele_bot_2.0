@@ -9,7 +9,19 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(chatId, "welcome  "+userName+"✨ ");
   bot.sendMessage(chatId, "Type /list to see your friends birthday!!");
 });
-
+bot.onText(/\/time/, (msg) => {
+  const chatId = msg.chat.id;
+  const today = new Date().toISOString();
+  let currentDate = today.substring(5,10);
+  bot.sendMessage(chatId, currentDate);
+});
+bot.onText(/.*/, (msg) => {
+  const chatId = msg.chat.id;
+  const arr=["Hi","Hello","hi","hello","hey","Hii"]
+if(arr.includes(msg.text)){
+    bot.sendMessage(chatId, "Hi ✋ ");
+  }
+});
   bot.onText(/\/list/, (msg) => {
   
     const chatId = msg.chat.id;
