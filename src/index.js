@@ -12,7 +12,7 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\/time/, (msg) => {
   const chatId = msg.chat.id;
   const today = new Date().toISOString();
-  let currentDate = today.substring(5,10);
+  let currentDate = today;
   bot.sendMessage(chatId, currentDate);
 });
 bot.onText(/.*/, (msg) => {
