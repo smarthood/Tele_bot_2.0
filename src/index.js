@@ -1,8 +1,17 @@
+const http=require('http');
 require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const birthdays = require('./birthdays.json');
 const holidays = require('./holidays.json');
 const bot = new TelegramBot(process.env.token, { polling: { interval: 2000 } });
+const hostname='0.0.0.0'
+const port=3000;
+const server = http.createServer((req,res)=>{
+  res.statusCode=200;
+  res.setHeader('Content-type','text/plain');
+  res.end('Hello world')
+})
+
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const userName= msg.chat.last_name;
@@ -70,3 +79,6 @@ setInterval(() => {
       bot.sendMessage(-1001434326296, `Hey, today is ${birthday.name}'s Birthday! 🎂 `);
     });
   }, 24 * 60 * 60 * 1000);
+  server.listen(port,hostname,()=>{
+    console.log(`server running at http://${hostname}:${port}/`)
+  });
